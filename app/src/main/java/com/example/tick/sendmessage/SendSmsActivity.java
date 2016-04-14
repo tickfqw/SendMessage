@@ -23,7 +23,7 @@ public class SendSmsActivity extends Activity{
     EditText edbody;
     Button send,cancle;
 
-    BroadcastReceiver send_sms = new SendSMS();
+    //BroadcastReceiver send_sms = new SendSMS();
     BroadcastReceiver delivered_sms = new DelieveredSMS();
     String SENT_SMS_ACTION="SENT_SMS_ACTION";
     String DELIVERED_SMS_ACTION="DELIVERED_SMS_ACTION";
@@ -44,7 +44,7 @@ public class SendSmsActivity extends Activity{
                 getnum=ednum.getText().toString();
                 getmsg=edbody.getText().toString();
                 SendMessage sendmsg=new SendMessage(SendSmsActivity.this,getmsg,getnum);
-                sendmsg.sendmsg(send_sms, delivered_sms);
+                sendmsg.sendmsg(delivered_sms, delivered_sms);
                 ContentValues values=new ContentValues();
                 values.put("date",System.currentTimeMillis());
                 values.put("read",0);
@@ -88,7 +88,7 @@ public class SendSmsActivity extends Activity{
                 Toast.makeText(context,"短信已被接收",Toast.LENGTH_SHORT).show();
             }
         };*/
-        registerReceiver(send_sms, new IntentFilter(SENT_SMS_ACTION));
+        //registerReceiver(send_sms, new IntentFilter(SENT_SMS_ACTION));
         registerReceiver(delivered_sms, new IntentFilter(DELIVERED_SMS_ACTION));
     }
 
@@ -101,7 +101,7 @@ public class SendSmsActivity extends Activity{
 
     @Override
     protected void onDestroy() {
-        unregisterReceiver(send_sms);
+        //unregisterReceiver(send_sms);
         unregisterReceiver(delivered_sms);
         super.onDestroy();
     }

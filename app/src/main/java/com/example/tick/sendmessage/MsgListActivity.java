@@ -2,10 +2,13 @@ package com.example.tick.sendmessage;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.logging.LogRecord;
 
 /**
  * Created by tick on 2016/4/13.
@@ -32,6 +36,16 @@ public class MsgListActivity extends Activity {
     private ListView msgList;
     private List<Map<String, Object>> contents;
     private SimpleAdapter adapter;
+    private DelieveredSMS delieveredSMS = new DelieveredSMS();
+    /*private Handler handler = new Handler(){
+
+        @Override
+        public void handleMessage(Message msg) {
+            Log.d("aa","Msg");
+            adapter.notifyDataSetChanged();
+            msgList.setAdapter(adapter);
+        }
+    };*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,18 +80,47 @@ public class MsgListActivity extends Activity {
                 intent.putExtra("listmsg", (String) getlist.get("listmsg"));
                 intent.putExtra("listtype", (String) getlist.get("listtype"));
                 MsgListActivity.this.startActivity(intent);
-               // MsgListActivity.this.finish();
+                // MsgListActivity.this.finish();
 
             }
         });
+        registerReceiver(delieveredSMS, new IntentFilter("DELIVERED_SMS_ACTION"));
+        delieveredSMS.setOnReceivedMessageListener(new DelieveredSMS.MessageListener() {
+            @Override
+            public void OnReceived() {
+               /* adapter=new SimpleAdapter(MsgListActivity.this, contents,R.layout.showlist,new String[] {
+                        "imag","listnum","listmsg","listtime","listtype"},new int[] {R.id.imag,R.id.listnum,R.id.listmsg,R.id.listtime,R.id.type});
+                adapter.notifyDataSetChanged();
+                msgList.setAdapter(adapter);*/
+                Uri uri=Uri.parse(AllFinalInfo.SMS_URI_ALL);
+                SmsContent sc=new SmsContent(MsgListActivity.this,uri);
+                contents=sc.getSmsInPhone();
+                adapter=new SimpleAdapter(MsgListActivity.this, contents,R.layout.showlist,new String[] {
+                        "imag","listnum","listmsg","listtime","listtype"},new int[] {R.id.imag,R.id.listnum,R.id.listmsg,R.id.listtime,R.id.type});
+                adapter.notifyDataSetChanged();
+                msgList.setAdapter(adapter);
+            }
+        });
+    }
 
-        }
+
+    /*public static void receivedSms(){
+        Log.d("aa","Msga");
+        Message msg = new Message();
+        handler.sendMessage(msg);
+    }*/
 
     @Override
     protected void onResume() {
+
         super.onResume();
         adapter.notifyDataSetChanged();
         msgList.setAdapter(adapter);
     }
 
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(delieveredSMS);
+        super.onDestroy();
+    }
 }

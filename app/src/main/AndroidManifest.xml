@@ -23,17 +23,16 @@
         </activity>
         <activity android:name=".SendSmsActivity"/>
         <activity android:name=".Replymsg"/>
-    <receiver android:name=".SendSMS">
+    <!--receiver android:name=".SendSMS">
         <intent-filter>
             <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
         </intent-filter>
-    </receiver>
-
-        <receiver android:name=".DelieveredSMS">
-            <intent-filter android:priority="1000">
-                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
-            </intent-filter>
-        </receiver>
+    </receiver>-->
+     <receiver android:name=".DelieveredSMS">
+         <intent-filter android:priority="1000">
+            <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+          </intent-filter>
+      </receiver>
     </application>
 
 </manifest>
