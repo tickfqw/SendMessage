@@ -12,7 +12,8 @@
         android:id="@+id/contact"
         android:layout_width="45dp"
         android:layout_height="45dp"
-         android:layout_marginLeft="20dp"
+        android:background="@drawable/people"
+        android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"/>
     <EditText
         android:id="@+id/ednum"
@@ -22,8 +23,12 @@
         android:layout_marginTop="10dp"
         android:numeric="integer"
         android:singleLine="true"/>
-
 </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
     <EditText
         android:id="@+id/edbody"
         android:layout_width="fill_parent"
@@ -34,11 +39,17 @@
         android:maxLines="11"
         android:minLines="11"
         android:scrollbars="vertical"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/send"
-        android:layout_gravity="center"
-        android:layout_marginBottom="20dp"
-        android:text="发送"/>
+      <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/send"
+            android:layout_marginBottom="10dp"
+            android:text="发送"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/cancle"
+            android:layout_marginBottom="10dp"
+            android:text="取消"/>
+    </LinearLayout>
 </LinearLayout>

@@ -12,17 +12,19 @@ import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 /**
  * Created by tick on 2016/4/13.
  */
 public class SendSmsActivity extends Activity{
-EditText ednum;
+    EditText ednum;
     EditText edbody;
-    Button send;
-    BroadcastReceiver send_sms;
-    BroadcastReceiver delivered_sms;
+    Button send,cancle;
+
+    BroadcastReceiver send_sms = new SendSMS();
+    BroadcastReceiver delivered_sms = new DelieveredSMS();
     String SENT_SMS_ACTION="SENT_SMS_ACTION";
     String DELIVERED_SMS_ACTION="DELIVERED_SMS_ACTION";
     String getnum;
@@ -35,6 +37,7 @@ EditText ednum;
         ednum=(EditText) findViewById(R.id.ednum);
         edbody=(EditText) findViewById(R.id.edbody);
         send=(Button) findViewById(R.id.send);
+        cancle = (Button) findViewById(R.id.cancle);
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -49,12 +52,18 @@ EditText ednum;
                 values.put("address",getnum);
                 values.put("body", getmsg);
                 getContentResolver().insert(Uri.parse("content://sms/sent"), values);
+                getContentResolver().insert(Uri.parse("content://sms/"), values);
                 edbody.setText("");
                 back();
             }
         });
-
-        send_sms=new BroadcastReceiver() {
+        cancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                back();
+            }
+        });
+        /*send_sms=new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 switch (getResultCode()){
@@ -72,21 +81,22 @@ EditText ednum;
                         break;
                 }
             }
-        };
-        delivered_sms=new BroadcastReceiver() {
+        };*/
+        /*delivered_sms=new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 Toast.makeText(context,"短信已被接收",Toast.LENGTH_SHORT).show();
             }
-        };
+        };*/
         registerReceiver(send_sms, new IntentFilter(SENT_SMS_ACTION));
         registerReceiver(delivered_sms, new IntentFilter(DELIVERED_SMS_ACTION));
     }
 
     private void back() {
-        Intent intent=new Intent(SendSmsActivity.this,MsgListActivity.class);
-        SendSmsActivity.this.startActivity(intent);
-        finish();
+        Intent intent=new Intent();
+        intent.setClass(SendSmsActivity.this,MsgListActivity.class);
+        startActivity(intent);
+        SendSmsActivity.this.finish();
     }
 
     @Override

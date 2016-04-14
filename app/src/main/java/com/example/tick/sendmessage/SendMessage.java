@@ -11,7 +11,7 @@ import java.util.ArrayList;
 /**
  * Created by tick on 2016/4/13.
  */
-public class SendMessage {
+public class SendMessage{
     Context context;
     String msg;
     String mobile;

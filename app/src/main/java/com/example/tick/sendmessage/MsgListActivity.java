@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -30,6 +31,7 @@ public class MsgListActivity extends Activity {
     private Button sendmsg;
     private ListView msgList;
     private List<Map<String, Object>> contents;
+    private SimpleAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +52,7 @@ public class MsgListActivity extends Activity {
                 MsgListActivity.this.finish();
             }
         });
-        SimpleAdapter adapter=new SimpleAdapter(MsgListActivity.this, contents,R.layout.showlist,new String[] {
+        adapter=new SimpleAdapter(MsgListActivity.this, contents,R.layout.showlist,new String[] {
                 "imag","listnum","listmsg","listtime","listtype"},new int[] {R.id.imag,R.id.listnum,R.id.listmsg,R.id.listtime,R.id.type});
         adapter.notifyDataSetChanged();
         msgList.setAdapter(adapter);
@@ -61,15 +63,21 @@ public class MsgListActivity extends Activity {
                 Map<String, Object> getlist = contents.get(position);
                 intent.putExtra("listnum", (String) getlist.get("listnum"));
                 intent.putExtra("listtime", (String) getlist.get("listtime"));
-                intent.putExtra("listmsg",(String) getlist.get("listmsg"));
-                intent.putExtra("listtype",(String) getlist.get("listtype"));
+                intent.putExtra("listmsg", (String) getlist.get("listmsg"));
+                intent.putExtra("listtype", (String) getlist.get("listtype"));
                 MsgListActivity.this.startActivity(intent);
-                MsgListActivity.this.finish();
+               // MsgListActivity.this.finish();
 
             }
         });
 
         }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adapter.notifyDataSetChanged();
+        msgList.setAdapter(adapter);
+    }
 
 }
