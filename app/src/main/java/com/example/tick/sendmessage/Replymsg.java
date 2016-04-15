@@ -62,6 +62,7 @@ public class Replymsg extends Activity {
                 values.put("address",getnum);
                 values.put("body",getmsg);
                 getContentResolver().insert(Uri.parse("content://sms/sent"), values);
+                getContentResolver().insert(Uri.parse("content://sms/"), values);
                 sendcontent.setText("");
                 back();
             }
@@ -88,8 +89,9 @@ public class Replymsg extends Activity {
     }
 
     private void back() {
-        Intent intentb=new Intent(Replymsg.this,MsgListActivity.class);
-        Replymsg.this.startActivity(intentb);
+        Intent intent=new Intent();
+        intent.setClass(Replymsg.this,MsgListActivity.class);
+        startActivity(intent);
         Replymsg.this.finish();
     }
 

@@ -36,7 +36,8 @@ public class MsgListActivity extends Activity {
     private ListView msgList;
     private List<Map<String, Object>> contents;
     private SimpleAdapter adapter;
-    private DelieveredSMS delieveredSMS = new DelieveredSMS();
+    private DelieveredSMS delivered_sms = new DelieveredSMS();
+    private Receiver receiver= new Receiver();
     /*private Handler handler = new Handler(){
 
         @Override
@@ -84,8 +85,23 @@ public class MsgListActivity extends Activity {
 
             }
         });
-        registerReceiver(delieveredSMS, new IntentFilter("DELIVERED_SMS_ACTION"));
-        delieveredSMS.setOnReceivedMessageListener(new DelieveredSMS.MessageListener() {
+        registerReceiver(delivered_sms, new IntentFilter("DELIVERED_SMS_ACTION"));
+        registerReceiver(receiver, new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
+
+        receiver.setOnReceivedMessageListener(new Receiver.MessageListenerr(){
+            @Override
+            public void OnReceived() {
+                Uri uri=Uri.parse(AllFinalInfo.SMS_URI_ALL);
+                SmsContent sc=new SmsContent(MsgListActivity.this,uri);
+                contents=sc.getSmsInPhone();
+                adapter=new SimpleAdapter(MsgListActivity.this, contents,R.layout.showlist,new String[] {
+                        "imag","listnum","listmsg","listtime","listtype"},new int[] {R.id.imag,R.id.listnum,R.id.listmsg,R.id.listtime,R.id.type});
+                adapter.notifyDataSetChanged();
+                msgList.setAdapter(adapter);
+            }
+        });
+
+        delivered_sms.setOnReceivedMessageListener(new DelieveredSMS.MessageListener() {
             @Override
             public void OnReceived() {
                /* adapter=new SimpleAdapter(MsgListActivity.this, contents,R.layout.showlist,new String[] {
@@ -120,7 +136,7 @@ public class MsgListActivity extends Activity {
 
     @Override
     protected void onDestroy() {
-        unregisterReceiver(delieveredSMS);
+        unregisterReceiver(delivered_sms);
         super.onDestroy();
     }
 }
