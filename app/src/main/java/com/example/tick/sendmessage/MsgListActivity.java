@@ -38,6 +38,7 @@ public class MsgListActivity extends Activity {
     private SimpleAdapter adapter;
     private DelieveredSMS delivered_sms = new DelieveredSMS();
     private Receiver receiver= new Receiver();
+    private SendSMS send_sms = new SendSMS();
     /*private Handler handler = new Handler(){
 
         @Override
@@ -86,16 +87,30 @@ public class MsgListActivity extends Activity {
             }
         });
         registerReceiver(delivered_sms, new IntentFilter("DELIVERED_SMS_ACTION"));
+        registerReceiver(send_sms, new IntentFilter("SENT_SMS_ACTION"));
         registerReceiver(receiver, new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
 
-        receiver.setOnReceivedMessageListener(new Receiver.MessageListenerr(){
+        send_sms.setOnReceivedMessageListener(new SendSMS.MessageListeners() {
             @Override
             public void OnReceived() {
-                Uri uri=Uri.parse(AllFinalInfo.SMS_URI_ALL);
-                SmsContent sc=new SmsContent(MsgListActivity.this,uri);
-                contents=sc.getSmsInPhone();
-                adapter=new SimpleAdapter(MsgListActivity.this, contents,R.layout.showlist,new String[] {
-                        "imag","listnum","listmsg","listtime","listtype"},new int[] {R.id.imag,R.id.listnum,R.id.listmsg,R.id.listtime,R.id.type});
+                Uri uri = Uri.parse(AllFinalInfo.SMS_URI_ALL);
+                SmsContent sc = new SmsContent(MsgListActivity.this, uri);
+                contents = sc.getSmsInPhone();
+                adapter = new SimpleAdapter(MsgListActivity.this, contents, R.layout.showlist, new String[]{
+                        "imag", "listnum", "listmsg", "listtime", "listtype"}, new int[]{R.id.imag, R.id.listnum, R.id.listmsg, R.id.listtime, R.id.type});
+                adapter.notifyDataSetChanged();
+                msgList.setAdapter(adapter);
+            }
+        });
+
+        receiver.setOnReceivedMessageListener(new Receiver.MessageListenerr() {
+            @Override
+            public void OnReceived() {
+                Uri uri = Uri.parse(AllFinalInfo.SMS_URI_ALL);
+                SmsContent sc = new SmsContent(MsgListActivity.this, uri);
+                contents = sc.getSmsInPhone();
+                adapter = new SimpleAdapter(MsgListActivity.this, contents, R.layout.showlist, new String[]{
+                        "imag", "listnum", "listmsg", "listtime", "listtype"}, new int[]{R.id.imag, R.id.listnum, R.id.listmsg, R.id.listtime, R.id.type});
                 adapter.notifyDataSetChanged();
                 msgList.setAdapter(adapter);
             }
@@ -108,11 +123,11 @@ public class MsgListActivity extends Activity {
                         "imag","listnum","listmsg","listtime","listtype"},new int[] {R.id.imag,R.id.listnum,R.id.listmsg,R.id.listtime,R.id.type});
                 adapter.notifyDataSetChanged();
                 msgList.setAdapter(adapter);*/
-                Uri uri=Uri.parse(AllFinalInfo.SMS_URI_ALL);
-                SmsContent sc=new SmsContent(MsgListActivity.this,uri);
-                contents=sc.getSmsInPhone();
-                adapter=new SimpleAdapter(MsgListActivity.this, contents,R.layout.showlist,new String[] {
-                        "imag","listnum","listmsg","listtime","listtype"},new int[] {R.id.imag,R.id.listnum,R.id.listmsg,R.id.listtime,R.id.type});
+                Uri uri = Uri.parse(AllFinalInfo.SMS_URI_ALL);
+                SmsContent sc = new SmsContent(MsgListActivity.this, uri);
+                contents = sc.getSmsInPhone();
+                adapter = new SimpleAdapter(MsgListActivity.this, contents, R.layout.showlist, new String[]{
+                        "imag", "listnum", "listmsg", "listtime", "listtype"}, new int[]{R.id.imag, R.id.listnum, R.id.listmsg, R.id.listtime, R.id.type});
                 adapter.notifyDataSetChanged();
                 msgList.setAdapter(adapter);
             }

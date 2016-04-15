@@ -12,6 +12,7 @@ import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -22,13 +23,28 @@ public class SendSmsActivity extends Activity{
     EditText ednum;
     EditText edbody;
     Button send,cancle;
+    ImageButton contact;
 
-    //BroadcastReceiver send_sms = new SendSMS();
+    BroadcastReceiver send_sms = new SendSMS();
     BroadcastReceiver delivered_sms = new DelieveredSMS();
     String SENT_SMS_ACTION="SENT_SMS_ACTION";
     String DELIVERED_SMS_ACTION="DELIVERED_SMS_ACTION";
     String getnum;
     String getmsg;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode){
+            case 1:
+                if(resultCode==RESULT_OK){
+                    String returnedData=data.getStringExtra("data_return");
+                    ednum.setText(returnedData);
+                }
+                break;
+            default:
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +54,15 @@ public class SendSmsActivity extends Activity{
         edbody=(EditText) findViewById(R.id.edbody);
         send=(Button) findViewById(R.id.send);
         cancle = (Button) findViewById(R.id.cancle);
+        contact = (ImageButton) findViewById(R.id.contact);
+        contact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Toast.makeText(SendSmsActivity.this,"显示通讯录",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(SendSmsActivity.this,Contact.class);
+                startActivityForResult(intent, 1);
+            }
+        });
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,7 +113,7 @@ public class SendSmsActivity extends Activity{
                 Toast.makeText(context,"短信已被接收",Toast.LENGTH_SHORT).show();
             }
         };*/
-        //registerReceiver(send_sms, new IntentFilter(SENT_SMS_ACTION));
+        registerReceiver(send_sms, new IntentFilter(SENT_SMS_ACTION));
         registerReceiver(delivered_sms, new IntentFilter(DELIVERED_SMS_ACTION));
     }
 

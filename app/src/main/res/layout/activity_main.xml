@@ -9,7 +9,7 @@
         android:layout_width="fill_parent"
         android:layout_height="45dp"
         android:id="@+id/newsms"
-        android:text="newsms"
+        android:text="新  建  信  息"
         android:textColor="#65516A"
         android:textSize="25dp"/>
     <ListView
@@ -17,8 +17,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/msg_list"
         android:background="#000000"
-        android:scrollbars="vertical"
-        android:text="newsms">
+        android:scrollbars="vertical">
     </ListView>
 </LinearLayout>
 
